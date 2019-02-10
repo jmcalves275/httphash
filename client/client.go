@@ -2,13 +2,12 @@ package client
 
 import (
 	"bytes"
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
 	"time"
+
+	"github.com/playground/httphash/common"
 )
 
 type HTTPHash struct {
@@ -65,7 +64,7 @@ func (h *HTTPHash) Process() {
 func (h *HTTPHash) doRequest(url string, buffer chan string, response chan string) {
 	buffer <- url
 
-	url = resolveURL(url)
+	url = common.ResolveURL(url)
 
 	hash, err := h.request(url)
 	if err != nil {
@@ -97,20 +96,7 @@ func (h *HTTPHash) request(url string) (string, error) {
 
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodystring := string(bodyBytes)
-	hash := md5Hash(bodystring)
+	hash := common.MD5Hash(bodystring)
 
 	return hash, nil
-}
-
-func md5Hash(text string) string {
-	data := []byte(text)
-	hash := md5.Sum(data)
-	return hex.EncodeToString(hash[:])
-}
-
-func resolveURL(url string) string {
-	if strings.Contains(url, "http://") {
-		return url
-	}
-	return fmt.Sprintf("%s%s", "http://", url)
 }

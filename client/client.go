@@ -11,8 +11,8 @@ import (
 )
 
 type HTTPHash struct {
-	urls       []string
-	parallel   int
+	URLs       []string
+	Parallel   int
 	httpClient http.Client
 }
 
@@ -26,8 +26,8 @@ func New(parallel int, urls []string) (*HTTPHash, error) {
 	}
 
 	return &HTTPHash{
-		parallel: parallel,
-		urls:     urls,
+		Parallel: parallel,
+		URLs:     urls,
 		httpClient: http.Client{
 			Timeout: 10 * time.Second,
 		},
@@ -35,14 +35,14 @@ func New(parallel int, urls []string) (*HTTPHash, error) {
 
 }
 
-func (h *HTTPHash) Process() {
-	buffer := make(chan string, h.parallel)
+// Makes parallel requests and returns the number of requests made.
+func (h *HTTPHash) Process() int {
+	buffer := make(chan string, h.Parallel)
 	response := make(chan string)
-
 	var slc []string
 
-	for _, url := range h.urls {
-		go h.doRequest(url, buffer, response)
+	for _, url := range h.URLs {
+		go h.DoRequest(url, buffer, response)
 	}
 
 	for {
@@ -51,17 +51,23 @@ func (h *HTTPHash) Process() {
 			<-buffer
 			slc = append(slc, rsp)
 			fmt.Println(rsp)
-			if len(slc) == len(h.urls) {
+			if len(slc) == len(h.URLs) {
 				close(buffer)
 				close(response)
-				return
+				return len(slc)
 			}
 		}
 	}
 
 }
 
-func (h *HTTPHash) doRequest(url string, buffer chan string, response chan string) {
+// Runs assynchronously. Must be called 'go' keyword
+// Executes if the buffer is not full. Buffer size
+// depends on the number of parallel requests.
+//
+// If the buffer is not full, the method makes
+// an http request and writes the answer in the response channel.
+func (h *HTTPHash) DoRequest(url string, buffer chan string, response chan string) {
 	buffer <- url
 
 	url = common.ResolveURL(url)
@@ -77,6 +83,7 @@ func (h *HTTPHash) doRequest(url string, buffer chan string, response chan strin
 
 }
 
+// Performs http GET request for a given URL.
 func (h *HTTPHash) request(url string) (string, error) {
 
 	buffer := new(bytes.Buffer)

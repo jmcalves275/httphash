@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+// Function to resolve the url
+//
+// Example:
+// google.com turns into http://google.com
 func ResolveURL(url string) string {
 	if strings.Contains(url, "http://") {
 		return url

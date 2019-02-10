@@ -16,7 +16,7 @@ $ ./httphash -parallel 2 google.com facebook.com www.sapo.pt http://yahoo.com
   computer. Please see https://golang.org/doc/install
 
 # Usage
-1) Clone this repository or use `go get github.com/jmcalves275/httphash.`
+1) Clone this repository or use `go get github.com/jmcalves275/httphash`
 2) Go into project folder: `cd /Users/{username}/go/src/github.com/jmcalves275/httphash`
 3) Build everything: `go build ./...`
 4) Execute the app: `./httphash google.com`

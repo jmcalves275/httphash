@@ -2,8 +2,8 @@
 Tool to make http requests and hash response
 
 # Description
-httphash makes parallel requests for a giver list of hosts. Theh tool requested address
-along with the MD5 hash of the response.
+httphash makes parallel requests for a giver list of hosts. The tool requested 
+address along with the MD5 hash of the response.
 
 - httphash can do up to 10 parallel requests by default.
 

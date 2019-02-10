@@ -8,7 +8,7 @@ address along with the MD5 hash of the response.
 - you can specify number of parallel requests by using `-parallel` flag. 
 **Example:**
 ```
-$ ./httphash -parallel 2 google.com facebook.com www.sapo.pt http://yahoo.com
+./httphash -parallel 2 google.com facebook.com www.sapo.pt http://yahoo.com
 ```
 
 # Requirements

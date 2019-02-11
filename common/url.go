@@ -10,7 +10,7 @@ import (
 // Example:
 // google.com turns into http://google.com
 func ResolveURL(url string) string {
-	if strings.Contains(url, "http://") {
+	if strings.HasPrefix(url, "http://") {
 		return url
 	}
 	return fmt.Sprintf("%s%s", "http://", url)
